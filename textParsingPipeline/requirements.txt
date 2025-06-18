@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+google-cloud-storage
+python-docx
+PyMuPDF
+pandas
+openpyxl
+beautifulsoup4
+requests
