@@ -156,3 +156,81 @@ Enable debug logging by modifying the logging level:
 ```python
 logging.basicConfig(level=logging.DEBUG)
 ```
+
+additional improvements - 
+# Text Parsing Pipeline
+
+This is a FastAPI-based text extraction pipeline that supports PDF, DOCX, XLSX, HTML, and XML. Files are uploaded or pulled from a URL, parsed, and saved to Google Cloud Storage.
+
+## 🧰 Features
+- ✅ PDF, DOCX, XLSX, HTML, XML support
+- ✅ Upload single file or URL
+- ✅ Upload and parse multiple files in parallel
+- ✅ Deduplication using file hash
+- ✅ GCS integration
+- ✅ Modular design
+
+---
+
+## 🚀 Run It Locally
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+
+---
+
+## 📡 API Endpoints
+
+### ➤ `POST /upload/`
+**Upload a single file**
+```bash
+curl -F "file=@example.pdf" http://localhost:8000/upload/
+```
+
+### ➤ `POST /upload-url/`
+**Upload content from a URL**
+```bash
+curl -X POST -F "url=https://example.com" http://localhost:8000/upload-url/
+```
+
+### ➤ `POST /upload-multiple/`
+**Upload and process multiple files in parallel**
+```bash
+curl -X POST http://localhost:8000/upload-multiple/ \
+  -F "files=@sample1.pdf" \
+  -F "files=@sample2.docx" \
+  -F "files=@sample3.xlsx"
+```
+
+---
+
+## 📁 Output
+Each processed file is saved in GCS under the `output/` folder with `.json` extension containing extracted text.
+
+---
+
+## 🔧 Configuration
+Set your GCS bucket name and folders in `app/config.py`:
+```python
+GCS_BUCKET = "your-gcs-bucket"
+GCS_INPUT_FOLDER = "input"
+GCS_OUTPUT_FOLDER = "output"
+```
+
+---
+
+## 📦 Supported File Types
+- `.pdf`
+- `.docx`, `.doc`
+- `.xlsx`
+- `.html`
+- `.xml`
+
+---
+
+## 🔒 Deduplication
+- Files are hashed (SHA-256) before upload.
+- If the same file is uploaded again, it is not reprocessed.
+
